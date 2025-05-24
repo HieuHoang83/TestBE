@@ -1,0 +1,28 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id       String    @id @default(uuid())
+  name     String
+  email    String    @unique
+  phone    String
+  company  String
+  contacts Contact[] // Một khách hàng có nhiều liên hệ
+}
+
+model Contact {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  note       String?
+  position   String
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+}
